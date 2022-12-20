@@ -10,6 +10,8 @@ const crypto = require('crypto')
 
 let users = [];
 
+let reverseKey = {}
+
 function* idMaker() {
 
   let index = 0;
@@ -50,12 +52,14 @@ const login = (user) => {
       return null
     }
     users[index].apiKey = apiKey;
-    return apiKey;
+    reverseKey[apiKey] = users[index].id
+    return { apiKey, id: users[index].id };
   }
   return null;
 }
 
 const getUserById = (id) => {
+  console.log('In user', id, users)
   return users.find((u) => u.id === id)
 }
 
@@ -68,10 +72,16 @@ const getUserByName = (name) => {
   }
 }
 
+const getUserByKey = (key) => {
+  console.log('In user', reverseKey)
+  return reverseKey[key];
+}
+
 module.exports = {
   register,
   getUserById,
   getUserByName,
+  getUserByKey,
   users,
   login
 }
